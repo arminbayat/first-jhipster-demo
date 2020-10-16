@@ -2,7 +2,8 @@
     <h2 id="page-heading">
         <span>Products</span>
 
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-product" [routerLink]="['/product/new']">
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-product"
+                [routerLink]="['/product/new']">
             <fa-icon icon="plus"></fa-icon>
             <span>
             Create a new Product
@@ -18,64 +19,44 @@
         <span>No products found</span>
     </div>
 
-    <div class="table-responsive" id="entities" *ngIf="products && products.length > 0">
-        <table class="table table-striped" aria-describedby="page-heading">
-            <thead>
-                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
-                    <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="price"><span>Price</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="size"><span>Size</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="image"><span>Image</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="productCategory.id"><span>Product Category</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let product of products ;trackBy: trackId">
-                    <td><a [routerLink]="['/product', product.id, 'view']">{{ product.id }}</a></td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.description }}</td>
-                    <td>{{ product.price }}</td>
-                    <td>{{ product.size }}</td>
-                    <td>
-                        <a *ngIf="product.image" (click)="openFile(product.imageContentType, product.image)">
-                            <img [src]="'data:' + product.imageContentType + ';base64,' + product.image" style="max-height: 30px;" alt="product image"/>
-                        </a>
-                        <span *ngIf="product.image">{{ product.imageContentType }}, {{ byteSize(product.image) }}</span>
-                    </td>
-                    <td>
-                        <div *ngIf="product.productCategory">
-                            <a [routerLink]="['/product-category', product.productCategory?.id, 'view']" >{{ product.productCategory?.id }}</a>
+    <div *ngIf="products">
+        <div class="list-group">
+            <a class="list-group-item list-group-item-action flex-column       align        items-start"
+               *ngFor="let product of products; trackBy: trackId">
+                <div class="row">
+                    <div class="col-2 col-xs-12 justify-content-center"><img
+                        [src]="'data:' + product.imageContentType + ';base64,' + product.image"
+                        style="max-height:150px;" alt="product image"/>
+                    </div>
+                    <div class="col col-xs-12">
+                        <div class="d-flex w-100 justify-content-between">
+                            <a [routerLink]="['/product', product.id, 'view']">
+                                <h5 class="mb-1">{{ product.name }}</h5>
+                            </a>
+                            <small *ngIf="product.productCategory">
+                                <a [routerLink]="['/product-category', product.productCategory?.id, 'view']">
+                                    Category: {{ product.productCategory?.id }}
+                                </a>
+                            </small>
                         </div>
-                    </td>
-                    <td class="text-right">
-                        <div class="btn-group">
-                            <button type="submit"
-                                    [routerLink]="['/product', product.id, 'view']"
-                                    class="btn btn-info btn-sm">
-                                <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline">View</span>
-                            </button>
-
-                            <button type="submit"
-                                    [routerLink]="['/product', product.id, 'edit']"
+                        <small class="mb-1"> {{ product.description }} </small>
+                        <p class="mb-1">{{ product.price | currency : 'USD' }} </p>
+                        <small>
+                            Size: <span jhiTranslate="{{ 'storeApp.Size.' + product.size}}"> {{ product.size }} </span>
+                        </small>
+                        <div *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                            <button type="submit" [routerLink]="['/product', product.id,'edit']"
                                     class="btn btn-primary btn-sm">
-                                <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline">Edit</span>
-                            </button>
-
+                                <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span></button>
                             <button type="submit" (click)="delete(product)"
                                     class="btn btn-danger btn-sm">
-                                <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline">Delete</span>
+                                <fa-icon [icon]="'times'"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                             </button>
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            </a>
+        </div>
     </div>
 
     <div *ngIf="products && products.length > 0">
@@ -84,7 +65,9 @@
         </div>
 
         <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage"
+                            [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
+                            (pageChange)="loadPage($event)"></ngb-pagination>
         </div>
     </div>
 </div>
