@@ -35,7 +35,7 @@
     "otherModules": [],
     "enableTranslation": false,
     "blueprints": [],
-    "herokuAppName": "com-arminbayat-demo-heroku-1",
+    "herokuAppName": "com-arminbayat-demo-heroku",
     "herokuDeployType": "git",
     "herokuJavaVersion": "1.8"
   }

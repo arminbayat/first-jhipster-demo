@@ -12,7 +12,7 @@
 
 eureka:
   instance:
-    hostname: com-arminbayat-demo-heroku-1.herokuapp.com
+    hostname: com-arminbayat-demo-heroku.herokuapp.com
     non-secure-port: 80
     prefer-ip-address: false
 
