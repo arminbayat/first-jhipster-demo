@@ -19,9 +19,8 @@ eureka:
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:file:./target/h2db/db/store;DB_CLOSE_DELAY=-1
-    username: store
-    password:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
     hikari:
-      poolName: Hikari
-      auto-commit: false
+      maximumPoolSize: 8
