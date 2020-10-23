@@ -34,19 +34,9 @@ node {
             junit '**/target/test-results/**/TEST-*.xml'
         }
     }
-//
-//    stage('frontend tests') {
-//        try {
-//            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test'"
-//        } catch(err) {
-//            throw err
-//        } finally {
-//            junit '**/target/test-results/**/TEST-*.xml'
-//        }
-//    }
 
-    stage('packaging') {
-        sh "./mvnw -ntp verify -P-webpack -Pprod -DskipTests"
+    stage('package and deploy') {
+        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=com-arminbayat-heroku"
         archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
     }
 }
