@@ -34,6 +34,9 @@
     "dtoSuffix": "DTO",
     "otherModules": [],
     "enableTranslation": false,
-    "blueprints": []
+    "blueprints": [],
+    "herokuAppName": "com-arminbayat-heroku",
+    "herokuDeployType": "jar",
+    "herokuJavaVersion": "1.8"
   }
 }
